@@ -21,7 +21,6 @@ export function checkEvolution(state: DigimonSessionState): boolean {
 export function evolve(state: DigimonSessionState): void {
   if (state.stage >= 6) return;
 
-  const previousName = state.digimonName;
   state.stage = (state.stage + 1) as EvolutionStage;
   state.digimonName = getDigimonName(state.digimonLine, state.stage);
 
@@ -34,11 +33,6 @@ export function evolve(state: DigimonSessionState): void {
 
   // Evolution bonus
   state.hp = Math.min(100, state.hp + 10);
-
-  // Trigger evolution animation
-  state.animationState.isEvolving = true;
-  state.animationState.evolveFramesRemaining = 5;
-  state.animationState.previousStageName = previousName;
 }
 
 export function processEvolution(state: DigimonSessionState): boolean {

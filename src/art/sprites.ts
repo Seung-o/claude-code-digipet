@@ -3,7 +3,6 @@ import type { Mood } from '../digimon/stats.js';
 import type { SpriteData, SpriteFrames } from './braille-renderer.js';
 
 import { EGG_FRAMES } from './sprite-data/egg.js';
-import { EVOLVING_FRAMES } from './sprite-data/evolving.js';
 import { AGUMON_SPRITES } from './sprite-data/agumon.js';
 import { TENTOMON_SPRITES } from './sprite-data/tentomon.js';
 import { PATAMON_SPRITES } from './sprite-data/patamon.js';
@@ -31,8 +30,4 @@ export function getSprite(lineId: DigimonLineId, stage: number, frame: number): 
   const lineSprites = ALL_SPRITES[lineId];
   const frames = lineSprites?.[stage] ?? EGG_FRAMES;
   return frames[frame % 2];
-}
-
-export function getEvolvingSprite(frame: number): SpriteData {
-  return EVOLVING_FRAMES[frame % 2];
 }

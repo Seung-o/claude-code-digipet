@@ -2,11 +2,11 @@ import type { DigimonSessionState } from '../digimon/types.js';
 import { STAGE_NAMES } from '../digimon/types.js';
 import { DIGIMON_LINES, RESET, getDigimonColor } from '../digimon/registry.js';
 import { getMood, getStageProgress } from '../digimon/stats.js';
-import { getSprite, getEvolvingSprite, MOOD_FACES } from './sprites.js';
+import { getSprite, MOOD_FACES } from './sprites.js';
 import { renderSprite, getSpriteWidth } from './braille-renderer.js';
 import type { SpriteData } from './braille-renderer.js';
 import { renderPercentBar, coloredBar } from './bars.js';
-import { advanceAnimation, getEvolutionText } from './animations.js';
+import { advanceAnimation } from './animations.js';
 
 function getSpritePad(sprite: SpriteData): string {
   return ' '.repeat(getSpriteWidth(sprite));
@@ -19,14 +19,9 @@ export function renderDigimon(state: DigimonSessionState): string {
   const progress = getStageProgress(state.stage, state.totalExp);
   const percentStr = `${Math.round(progress * 100)}%`;
 
-  // Check if evolving
-  const anim = state.animationState;
-  const isEvolvingNow = anim.isEvolving && anim.evolveFramesRemaining > 0;
-
   // Get sprite data and render to braille
-  const spriteData = isEvolvingNow
-    ? getEvolvingSprite(anim.currentFrame)
-    : getSprite(state.digimonLine, state.stage, anim.currentFrame);
+  const anim = state.animationState;
+  const spriteData = getSprite(state.digimonLine, state.stage, anim.currentFrame);
 
   const spriteLines = renderSprite(spriteData, mood);
 
@@ -45,11 +40,6 @@ export function renderDigimon(state: DigimonSessionState): string {
     const nextName = line.names[state.stage + 1];
     nextHint = ` ⬆ ${nextName}`;
   }
-
-  // Evolution animation text
-  const evoText = isEvolvingNow
-    ? getEvolutionText(anim.evolveFramesRemaining, anim.previousStageName, state.digimonName)
-    : null;
 
   // Compute dynamic layout width based on sprite size
   const spriteW = getSpriteWidth(spriteData);
@@ -73,10 +63,6 @@ export function renderDigimon(state: DigimonSessionState): string {
   const infoLines = [
     `EXP ${expBar}${nextHint}`,
   ];
-
-  if (evoText) {
-    infoLines.unshift(`\x1b[1;33m${evoText}${RESET}`);
-  }
 
   for (let i = 0; i < Math.max(spriteLines.length, infoLines.length); i++) {
     const spritePart = spriteLines[i] ?? getSpritePad(spriteData);

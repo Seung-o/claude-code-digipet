@@ -58,9 +58,6 @@ export interface EvolutionLogEntry {
 
 export interface AnimationState {
   currentFrame: number;
-  isEvolving: boolean;
-  evolveFramesRemaining: number;
-  previousStageName?: string;
 }
 
 export interface DigimonSessionState {

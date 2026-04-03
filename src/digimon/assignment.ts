@@ -73,8 +73,6 @@ export function assignDigimon(sessionId: string): DigimonSessionState {
     evolutionLog: [],
     animationState: {
       currentFrame: 0,
-      isEvolving: false,
-      evolveFramesRemaining: 0,
     },
   };
 }
